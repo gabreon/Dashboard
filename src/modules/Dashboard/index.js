@@ -23,11 +23,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 class Dashboard extends Component {
   componentDidMount() {
-    //const { user } = this.props;
-
-    const user = {
-      id: 'afe1e3bc-f8ac-4638-a635-9e050e46d84d',
-    };
+    const { user } = this.props;
 
     this.props.getAppointmentsOfMonth(user.id);
     this.props.getSurgeriesOfMonth(user.id);
@@ -101,7 +97,7 @@ class Dashboard extends Component {
                           data: appointmentData
                         }]
                       }}
-                      width={(Dimensions.get('window').width)/1.2}
+                      width={(Dimensions.get('window').width)/1.3}
                       height={200}
                       chartConfig={{
                         backgroundGradientFrom: 'rgba(255, 255, 255, 0)',
@@ -115,6 +111,7 @@ class Dashboard extends Component {
                         marginTop: 20,
                       }}
                       fromZero
+                      withInnerLines={false}
                     />
                   </View>
                 </View>
@@ -136,7 +133,7 @@ class Dashboard extends Component {
                           data: surgeryData
                         }]
                       }}
-                      width={(Dimensions.get('window').width)/1.2}
+                      width={(Dimensions.get('window').width)/1.3}
                       height={200}
                       chartConfig={{
                         backgroundGradientFrom: '#fff',
@@ -151,6 +148,7 @@ class Dashboard extends Component {
                         backgroundColor: 'rgba(0, 0, 0, 0)'
                       }}
                       fromZero
+                      withInnerLines={false}
                     />
                   </View>
 
@@ -206,13 +204,14 @@ const styles = StyleSheet.create({
   },
   thisMonthContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     marginBottom: 15,
-    marginHorizontal: 20,
+    marginHorizontal: 22.5,
   },
   thisMonthBox: {
     height: 100,
-    paddingHorizontal: 27,
+    marginHorizontal: 7.5,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
@@ -248,7 +247,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 3, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   npsItem: {
     fontFamily: 'Avenir-Book',

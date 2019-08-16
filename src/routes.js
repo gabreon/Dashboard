@@ -8,7 +8,7 @@ export default createAppContainer(
     Login: { screen: Login },
     Dashboard: { screen: Dashboard }
   }, {
-    initialRouteName: 'Dashboard',
+    initialRouteName: 'Login',
     mode: 'modal'
   })
 )

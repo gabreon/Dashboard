@@ -9,12 +9,17 @@ import {
   Dimensions
 } from 'react-native';
 
+import {
+  getAppointmentsOfMonth,
+  getSurgeriesOfMonth,
+  getPastAppointments,
+  getPastSurgeries,
+  getNps
+} from './actions';
+
 import { LineChart } from 'react-native-chart-kit'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
-
-import { getAppointmentsOfMonth, getSurgeriesOfMonth, getPastAppointments, getPastSurgeries, getNps } from './actions';
-
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -59,118 +64,116 @@ class Dashboard extends Component {
         <Text style={styles.title}>33 Care Dashboard</Text>
 
         <View style={styles.container}>
-          <View style={styles.actualInfo}>
-            <View style={styles.infoBox}>
+
+          <View style={styles.thisMonthContainer}>
+            <View style={styles.thisMonthBox}>
               {
                 appointmentsOfMonth.loading
                   ? <ActivityIndicator size="small" />
-                  : <Text style={styles.infoBoxData}>{appointmentsOfMonth.data.count}</Text>
+                  : <Text style={styles.thisMonthData}>{appointmentsOfMonth.data.count}</Text>
               }
-              <Text style={styles.infoBoxLabel}>Consultas no último mês</Text>
+              <Text style={styles.thisMonthDataLabel}>Consultas neste mês</Text>
             </View>
 
-            <View style={styles.infoBox}>
+            <View style={styles.thisMonthBox}>
               {
                 surgeriesOfMonth.loading
                   ? <ActivityIndicator size="small" />
-                  : <Text style={styles.infoBoxData}>{surgeriesOfMonth.data.count}</Text>
+                  : <Text style={styles.thisMonthData}>{surgeriesOfMonth.data.count}</Text>
               }
-              <Text style={styles.infoBoxLabel}>Cirurgias no último mês</Text>
+              <Text style={styles.thisMonthDataLabel}>Cirurgias neste mês</Text>
             </View>
           </View>
 
-          <View >
-            <View style={styles.chartBox}>
-              <Text style={styles.subtitle}>Consultas: </Text>
-              {
-                pastAppointments.loading
-                  ? <ActivityIndicator size="small" />
-                  :
-                  <View>
-                    <View style={styles.chartView}>
-                      <LineChart
-                        data={{
-                          labels: monthSurgeryData,
-                          datasets: [{
-                            data: surgeryData
-                          }]
-                        }}
-                        width={290} // from react-native
-                        height={200}
-                        chartConfig={{
-                          backgroundGradientFrom: 'rgba(255, 255, 255, 0)',
-                          backgroundGradientTo: 'rgba(255, 255, 255, 0)',
-                          color: (opacity = 1) => `rgba(0, 0, 0, 0.8)`,
-                          decimalPlaces: 0,
-                        }}
-                        bezier
-                        style={{
-                          marginHorizontal: -30,
-                          marginTop: 20,
-                        }}
 
-                      />
-                    </View>
+          <View style={styles.chartBox}>
+            <Text style={styles.subtitle}>Consultas:</Text>
+            {
+              pastAppointments.loading
+                ? <ActivityIndicator size="small" />
+                :
+                <View>
+                  <View style={styles.chartView}>
+                    <LineChart
+                      data={{
+                        labels: monthAppointmentData,
+                        datasets: [{
+                          data: appointmentData
+                        }]
+                      }}
+                      width={(Dimensions.get('window').width)/1.2}
+                      height={200}
+                      chartConfig={{
+                        backgroundGradientFrom: 'rgba(255, 255, 255, 0)',
+                        backgroundGradientTo: 'rgba(255, 255, 255, 0)',
+                        color: (opacity = 1) => `rgba(0, 0, 0, 0.5)`,
+                        decimalPlaces: 0,
+                      }}
+                      bezier
+                      style={{
+                        marginHorizontal: -30,
+                        marginTop: 20,
+                      }}
+                      fromZero
+                    />
                   </View>
-              }
-            </View>
+                </View>
+            }
+          </View>
 
-            <View style={styles.chartBox}>
-              <Text style={styles.subtitle}>Cirurgias: </Text>
-              {
-                pastSurgeries.loading
-                  ? <ActivityIndicator size="small" />
-                  :
+          <View style={styles.chartBox}>
+            <Text style={styles.subtitle}>Cirurgias: </Text>
+            {
+              pastSurgeries.loading
+                ? <ActivityIndicator size="small" />
+                :
+                <View>
                   <View>
-                    <View>
-                      <LineChart
-                        data={{
-                          labels: monthAppointmentData,
-                          datasets: [{
-                            data: appointmentData
-                          }]
-                        }}
-                        width={290} // from react-native
-                        height={200}
-                        chartConfig={{
-                          backgroundGradientFrom: '#fff',
-                          backgroundGradientTo: '#fff',
-                          color: (opacity = 1) => 'rgba(0, 0, 0, 0.8)',
-                          decimalPlaces: 0,
-                          style: {
-                            marginHorizontal: -138,
-                          }
-                        }}
-                        bezier
-                        style={{
-                          marginHorizontal: -30,
-                          marginTop: 20,
-                        }}
+                    <LineChart
+                      data={{
+                        labels: monthSurgeryData,
+                        datasets: [{
+                          data: surgeryData
+                        }]
+                      }}
+                      width={(Dimensions.get('window').width)/1.2}
+                      height={200}
+                      chartConfig={{
+                        backgroundGradientFrom: '#fff',
+                        backgroundGradientTo: '#fff',
+                        color: (opacity = 1) => 'rgba(0, 0, 0, 0.5)',
+                        decimalPlaces: 0,
+                      }}
+                      bezier
+                      style={{
+                        marginHorizontal: -30,
+                        marginTop: 20,
+                        backgroundColor: 'rgba(0, 0, 0, 0)'
+                      }}
+                      fromZero
+                    />
+                  </View>
 
-                      />
+                </View>
+            }
+          </View>
+
+          <View style={styles.chartBox}>
+            <Text style={styles.subtitle}>Avaliações: </Text>
+            {
+              nps.loading
+                ? <ActivityIndicator size="small" />
+                : nps.data.map(item => (
+                  <View key={item.id} style={styles.npsItemDirection} >
+                    <Text style={styles.npsItem}>{item.title}: </Text>
+
+                    <View style={styles.npsStars}>
+                      {this.printStar(item.rating)}
                     </View>
 
                   </View>
-              }
-            </View>
-
-            <View style={styles.chartBox}>
-              <Text style={styles.subtitle}>Avaliações: </Text>
-              {
-                nps.loading
-                  ? <ActivityIndicator size="small" />
-                  : nps.data.map(item => (
-                    <View key={item.id} style={styles.npsItemDirection} >
-                      <Text style={styles.npsItem}>{item.title}: </Text>
-
-                      <View style={styles.npsStars}>
-                        {this.printStar(item.rating)}
-                      </View>
-
-                    </View>
-                  ))
-              }
-            </View>
+                ))
+            }
           </View>
         </View>
       </ScrollView >
@@ -184,16 +187,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 40,
     backgroundColor: '#306680',
-    paddingHorizontal: 35,
-  },
-  container: {
-    marginBottom: 70,
-    flex: 4,
   },
   title: {
     fontSize: 32,
     textAlign: 'center',
-    marginVertical: 20,
+    marginVertical: 40,
     marginHorizontal: 20,
     fontFamily: 'Avenir-Black',
     color: '#30d1b6',
@@ -202,35 +200,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
   },
-  actualInfo: {
+  container: {
+    marginBottom: 70,
+    flex: 4,
+  },
+  thisMonthContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: 15,
+    marginHorizontal: 20,
   },
-  infoBox: {
-    width: 100,
-    marginVertical: 15,
-    marginRight: 20,
+  thisMonthBox: {
+    height: 100,
+    paddingHorizontal: 27,
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
-  infoBoxLabel: {
+  thisMonthDataLabel: {
     fontSize: 12,
-    textAlign: "left",
-    marginVertical: 5,
+    textAlign: "center",
     fontFamily: 'Avenir-Book',
     color: '#fff',
   },
-  infoBoxData: {
+  thisMonthData: {
     fontSize: 30,
-    textAlign: "left",
+    textAlign: "center",
     fontFamily: 'Avenir-Heavy',
     color: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
   },
   subtitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#306680',
@@ -239,13 +242,13 @@ const styles = StyleSheet.create({
   chartBox: {
     flex: 1,
     padding: 30,
-    borderRadius: 15,
-    marginVertical: 15,
+    marginBottom: 15,
     backgroundColor: '#F7FFF7',
     shadowColor: '#000',
     shadowOffset: { width: 3, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
+    marginHorizontal: 20,
   },
   npsItem: {
     fontFamily: 'Avenir-Book',
@@ -254,6 +257,7 @@ const styles = StyleSheet.create({
   },
   npsItemDirection: {
     flexDirection: 'row',
+    paddingLeft: 10,
   },
   npsStars: {
     flexDirection: 'row',

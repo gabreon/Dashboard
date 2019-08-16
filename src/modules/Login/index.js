@@ -73,35 +73,40 @@ class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 50,
     justifyContent: 'center',
-    backgroundColor: '#FFFBFA',
+    backgroundColor: '#99f0e1',
   },
   welcome: {
-    fontSize: 28,
-    textAlign: 'center',
+    fontSize: 34,
+    color: "#306680",
     marginVertical: 30,
-    color: "#000"
+    textAlign: 'center',
+    fontFamily: 'Avenir-Heavy',
   },
   input: {
-    marginHorizontal: 50,
     height: 40,
-    marginVertical: 15,
     fontSize: 16,
+    color: '#306680',
+    marginVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: 'black',
+    fontFamily: 'Avenir-Book',
+    borderBottomColor: '#306680',
   },
   btnEnter: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    backgroundColor: '#00af9d',
-    alignItems: 'center',
-    marginHorizontal: 50,
+    borderRadius: 5,
     marginVertical: 20,
     paddingVertical: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#306680',
   },
   btnEnterText: {
+    fontSize: 15,
     color: '#ffffff',
-    fontWeight: '700'
+    fontWeight: '700',
+    fontFamily: 'Avenir-Black',
   }
 })
 
